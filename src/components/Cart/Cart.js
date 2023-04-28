@@ -1,33 +1,31 @@
 import React from "react";
 import "./Cart.css";
 
-const Cart = (props) => {
-  const cart = props.cart;
-  const total = cart.reduce((total, pd) => total + pd.price, 0);
-
+const Cart = ({ cart }) => {
+  let total = 0;
   let shipping = 0;
-  if (total > 100) {
-    shipping = 0;
-  } else if (total > 50) {
-    shipping = 6.99;
-  } else if (total > 1) {
-    shipping = 12.99;
+  let quantity = 0;
+  for (const pd of cart) {
+    quantity += pd.quantity;
+    total += pd.price * pd.quantity;
+    shipping += pd.shipping;
   }
 
-  const tax = total / 10;
-  const grandTotal = total + tax + shipping;
+  const tax = total * 0.1;
 
-  const formateNumber = (num) => {
-    const precision = parseFloat(num).toFixed(2);
-    return precision;
+  const grandTotal = total + shipping + tax;
+
+  const toPricition = (num) => {
+    const change = parseFloat(num).toFixed(2);
+    return change;
   };
   return (
     <div className="cart-area">
-      <h2>Shopping Cart</h2>
-      <h5>Product Price: {formateNumber(total)}</h5>
-      <h5>Shipping Cost: {formateNumber(shipping)}</h5>
-      <h5>Tax + VAT {formateNumber(tax)}</h5>
-      <h4>Total: {formateNumber(grandTotal)}</h4>
+      <h2>Shopping Cart : {quantity}</h2>
+      <h5>Product Price: {toPricition(total)} </h5>
+      <h5>Shipping Cost: {toPricition(shipping)} </h5>
+      <h5>Tax + VAT : {toPricition(tax)} </h5>
+      <h4>Total : {toPricition(grandTotal)} </h4>
     </div>
   );
 };
